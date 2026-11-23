@@ -78,17 +78,6 @@ Sober 官方文档：<https://soberjs.com/>（UI 组件库，项目中以 `s-` �
 2. **媒体层**：握手完成后，各客户端建立点对点 `RTCPeerConnection` 直接传输音频，默认使用 Google 公共 STUN 服务器（`stun.l.google.com:19302`）。
 3. **心跳与重连**：客户端每 5s 发送 `ping`，后端回 `pong`；断线后 3s 自动重连。
 
-### WebSocket 消息类型
-
-| 消息类型 | 方向 | 说明 |
-| --- | --- | --- |
-| `ping` / `pong` | 双向 | 心跳保活 |
-| `user_joined` / `user_left` | 服务端→客户端 | 成员进出房间，携带在线用户列表 |
-| `text_message` | 双向 | 房间文字聊天 |
-| `offer` / `answer` / `ice_candidate` | 双向 | WebRTC SDP / ICE 信令（转发给指定成员） |
-| `mute_audio` / `speaking` | 双向 | 静音 / 说话状态广播 |
-| `join_room` / `leave_room` / `reconnect` | 预留 | 房间控制消息 |
-
 ## 数据库设计
 
 数据库名 `light_link`（由 `light-link.sql` 初始化），共 5 张表：

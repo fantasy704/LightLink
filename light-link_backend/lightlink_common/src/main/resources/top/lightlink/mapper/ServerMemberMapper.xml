@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="top.lightlink.mapper.ServerMemberMapper">
+    <sql id="base_columns_list">
+        m.server_id, m.server_user
+        <if test="hasServerInfo != null and hasServerInfo == true">
+            , s.server_name, s.server_master, s.server_info, s.max_number, s.server_image, s.extra
+        </if>
+    </sql>
+    <sql id="base_condition_field">
+        <if test="serverId != null and serverId != ''">
+            and server_id = #{serverId}
+        </if>
+        <if test="serverUser != null and serverUser != ''">
+            and server_user = #{serverUser}
+        </if>
+    </sql>
+    <sql id="base_condition">
+        <where>
+            <include refid="base_condition_field"/>
+       </where>
+    </sql>
+    <insert id="insert">
+        insert into server_member (server_id, server_user)
+        values (#{serverId}, #{serverUser})
+    </insert>
+    <delete id="deleteByParam">
+        delete from server_member m
+        <include refid="base_condition"/>
+    </delete>
+    <select id="selectByParam" resultType="top.lightlink.entity.po.ServerMember">
+        select <include refid="base_columns_list"/>
+        from server_member m
+        <include refid="base_condition"/>
+    </select>
+    <select id="selectListByParam" resultType="top.lightlink.entity.po.ServerMember">
+        select <include refid="base_columns_list"/>
+        <if test="hasUserInfo != null and hasUserInfo == true">
+            ,u.name memberName
+        </if>
+        from server_member m
+        <if test="hasServerInfo != null and hasServerInfo == true">
+            join server s on m.server_id = s.server_id
+        </if>
+        <if test="hasUserInfo != null and hasUserInfo == true">
+            join `user_info` u ON u.uid = m.server_user
+        </if>
+        <include refid="base_condition"/>
+    </select>
+    <select id="selectCountByParam" resultType="java.lang.Integer">
+        select count(*) from server_member m
+        <include refid="base_condition"/>
+    </select>
+
+</mapper>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="top.lightlink.mapper.InviteLinkMapper">
+
+    <sql id="base_columns_list">
+        i.link_key, i.link_server
+    </sql>
+
+    <insert id="insert">
+        insert into invite_link (link_key, link_server)
+        values (#{linkKey}, #{linkServer})
+    </insert>
+    <delete id="deleteByParam">
+        delete from invite_link i
+        <include refid="base_condition" />
+    </delete>
+
+    <sql id="base_condition_field">
+        <if test="linkKey != null and linkKey != ''">
+            and i.link_key = #{linkKey}
+        </if>
+        <if test="linkServer != null and linkServer != ''">
+            and i.link_server = #{linkServer}
+        </if>
+    </sql>
+
+    <sql id="base_condition">
+        <where>
+            <include refid="base_condition_field" />
+        </where>
+    </sql>
+
+    <select id="selectByParam" resultType="top.lightlink.entity.po.InviteLink">
+        select <include refid="base_columns_list" />
+        from invite_link i
+        <include refid="base_condition" />
+    </select>
+</mapper>

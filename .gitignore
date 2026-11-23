@@ -1,0 +1,8 @@
+# JetBrains IDE
+.idea/
+
+# 项目文档目录
+/document/
+
+# 本地 Redis(Windows 自带运行目录)
+/Redis-7.4.2-Windows-x64-cygwin-with-Service/

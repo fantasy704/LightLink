@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="top.lightlink.mapper.UserInfoMapper">
+    <sql id="base_columns_list">
+        u.uid, u.email, u.name, u.password, u.avatar, u.extra
+    </sql>
+
+    <resultMap id="base_result_map" type="top.lightlink.entity.po.UserInfo">
+        <result column="uid" property="uid" />
+        <result column="email" property="email" />
+        <result column="name" property="name" />
+        <result column="password" property="password" />
+        <result column="avatar" property="avatar" />
+        <result column="extra" property="extra" />
+    </resultMap>
+
+    <sql id="base_condition_field">
+        <if test="uid != null and uid != ''">
+            and u.uid = #{uid}
+        </if>
+        <if test="email != null and email != ''">
+            and u.email = #{email}
+        </if>
+        <if test="name != null and name != ''">
+            and u.name = #{name}
+        </if>
+        <if test="emailOrName != null and emailOrName != ''">
+            and (u.email = #{emailOrName} or u.name = #{emailOrName})
+        </if>
+        <if test="uidList != null and uidList.size() > 0">
+            and u.uid in <foreach collection="uidList" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+    </sql>
+
+    <sql id="base_condition">
+        <where>
+            <include refid="base_condition_field" />
+        </where>
+    </sql>
+
+    <insert id="insert">
+        insert into user_info(uid, email, name, password, avatar, extra)
+        values(#{uid}, #{email}, #{name}, #{password}, #{avatar}, #{extra})
+    </insert>
+    <select id="selectByParam" resultType="top.lightlink.entity.po.UserInfo">
+        select <include refid="base_columns_list"/> from user_info u
+        <include refid="base_condition" />
+    </select>
+    <select id="selectListByParam" resultType="top.lightlink.entity.po.UserInfo">
+        select u.uid, u.email, u.name, u.avatar, u.extra from user_info u
+        <include refid="base_condition" />
+    </select>
+</mapper>

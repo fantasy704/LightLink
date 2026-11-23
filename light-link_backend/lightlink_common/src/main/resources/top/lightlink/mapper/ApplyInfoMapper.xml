@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="top.lightlink.mapper.ApplyInfoMapper">
+
+    <sql id="base_columns_list">
+        a.email, a.name, a.password, a.avatar, a.extra, a.info
+    </sql>
+
+    <resultMap id="base_result_map" type="top.lightlink.entity.po.ApplyInfo">
+        <result column="email" property="email" />
+        <result column="name" property="name" />
+        <result column="password" property="password" />
+        <result column="avatar" property="avatar" />
+        <result column="extra" property="extra" />
+        <result column="info" property="info" />
+    </resultMap>
+
+    <sql id="base_condition_field">
+        <if test="email != null and email != ''">
+            and a.email = #{email}
+        </if>
+        <if test="name != null and name != ''">
+            and a.name = #{name}
+        </if>
+    </sql>
+
+    <sql id="base_condition">
+        <where>
+            <include refid="base_condition_field" />
+        </where>
+    </sql>
+
+    <insert id="insert">
+        insert into apply_info(email, name, password, info)
+        values(#{email}, #{name}, #{password}, #{info})
+    </insert>
+
+    <delete id="deleteByParam">
+        delete from apply_info a
+        <include refid="base_condition"/>
+    </delete>
+
+    <select id="selectList" resultType="top.lightlink.entity.po.ApplyInfo">
+        select <include refid="base_condition" /> from apply_info a
+        <include refid="base_condition"/>
+    </select>
+
+    <select id="selectCountByParam" resultType="java.lang.Integer">
+        select count(*) from apply_info a
+        <include refid="base_condition"/>
+    </select>
+    <select id="selectByParam" resultType="top.lightlink.entity.po.ApplyInfo">
+        select <include refid="base_columns_list"/> from apply_info a
+        <include refid="base_condition"/>
+    </select>
+    <select id="selectListByParam" resultType="top.lightlink.entity.po.ApplyInfo">
+        select <include refid="base_columns_list"/> from apply_info a
+        <include refid="base_condition"/>
+    </select>
+</mapper>

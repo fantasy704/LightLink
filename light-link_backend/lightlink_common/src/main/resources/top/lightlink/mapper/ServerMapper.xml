@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="top.lightlink.mapper.ServerMapper">
+    <sql id="base_columns_list">
+        s.server_id, s.server_name, s.server_master, s.server_info, s.max_number, s.server_image, s.extra
+    </sql>
+    <sql id="base_condition_field">
+        <if test="serverId != null and serverId != ''">
+            and s.server_id = #{serverId}
+        </if>
+        <if test="serverName != null and serverName != ''">
+            and s.server_name = #{serverName}
+        </if>
+        <if test="serverMaster != null and serverMaster != ''">
+            and s.server_master = #{serverMaster}
+        </if>
+        <if test="maxNumber != null">
+            and s.max_number = #{maxNumber}
+        </if>
+    </sql>
+
+    <sql id="base_condition">
+        <where>
+            <include refid="base_condition_field" />
+        </where>
+    </sql>
+
+    <insert id="insert">
+        insert into server(server_id, server_name, server_master, server_info, max_number, server_image, extra)
+        values(#{serverId}, #{serverName}, #{serverMaster}, #{serverInfo}, #{maxNumber}, #{serverImage}, #{extra})
+    </insert>
+    <update id="updateMaxNumber">
+        update server s
+        set s.max_number = #{maxNumber}
+        where s.server_id = #{serverId}
+    </update>
+    <delete id="deleteByParam">
+        delete from server s
+        <include refid="base_condition" />
+    </delete>
+
+    <select id="selectListByParam" resultType="top.lightlink.entity.po.Server">
+        select <include refid="base_columns_list"/>
+        from server s
+        <include refid="base_condition" />
+    </select>
+    <select id="selectByParam" resultType="top.lightlink.entity.po.Server">
+        select <include refid="base_columns_list"/>
+        from server s
+        <include refid="base_condition" />
+    </select>
+    <select id="selectCountByParam" resultType="java.lang.Integer">
+        select count(*) from server s
+        <include refid="base_condition" />
+    </select>
+</mapper>
